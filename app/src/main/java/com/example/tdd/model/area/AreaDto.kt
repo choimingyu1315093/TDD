@@ -9,9 +9,9 @@ data class AreaDto(
     ) {
         data class Body(
             val items: Items?,
-            val numOfRows: Int,
-            val pageNo: Int,
-            val totalCount: Int
+            val numOfRows: Int?,
+            val pageNo: Int?,
+            val totalCount: Int?
         ) {
             data class Items(
                 val item: List<Item>?
@@ -25,8 +25,8 @@ data class AreaDto(
         }
 
         data class Header(
-            val resultCode: String,
-            val resultMsg: String
+            val resultCode: String?,
+            val resultMsg: String?
         )
     }
 }

@@ -7,5 +7,11 @@ class AreaRepositoryImpl(
     private val mapper: AreaMapper,
     private val errorHandler: ErrorHandler
 ): AreaRepository {
-    override suspend fun getAreaCode(os: String, app: String, serviceKey: String): List<Area> = emptyList()
+    override suspend fun getAreaCode(os: String, app: String, serviceKey: String): List<Area>{
+        return try {
+            mapper.dtoToList(api.getAreaCode(os, app, serviceKey = serviceKey))
+        }catch (t: Throwable){
+            throw errorHandler.wrap(t)
+        }
+    }
 }
