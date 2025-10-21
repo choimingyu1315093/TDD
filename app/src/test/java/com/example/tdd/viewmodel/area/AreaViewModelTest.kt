@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 import kotlin.test.assertEquals
 
 class FakeRepoImpl(private val result: Result<List<Area>>): AreaRepository{
@@ -27,11 +28,6 @@ class FakeRepoImpl(private val result: Result<List<Area>>): AreaRepository{
 }
 
 class AreaViewModelTest {
-    val repo = FakeRepoImpl(Result.success(listOf(Area(1, "서울"))))
-    val errorHandler = ErrorHandler()
-
-    val viewModel = AreaViewModel(repo, errorHandler)
-
     private val dispatcher = StandardTestDispatcher() //코루틴 순서를 직접 제어하기 위한 리모컨
 
     @Before
@@ -46,6 +42,10 @@ class AreaViewModelTest {
 
     @Test
     fun `refresh 호출 시, Loading 다음 Success`() = runTest {
+        val repo = FakeRepoImpl(Result.success(listOf(Area(1, "서울"))))
+        val errorHandler = ErrorHandler()
+        val viewModel = AreaViewModel(repo, errorHandler)
+
         viewModel.state.test {
             assertEquals(ResourceState.Loading, awaitItem()) //Loading
             viewModel.refresh()
@@ -54,6 +54,24 @@ class AreaViewModelTest {
 
             val success = awaitItem() as ResourceState.Success //Success
             assertEquals(listOf(Area(1, "서울")), success.data)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `refresh 호출 시, Loading 다음 Error`() = runTest {
+        val repo = FakeRepoImpl(Result.failure(IOException("network error")))
+        val errorHandler = ErrorHandler()
+        val viewModel = AreaViewModel(repo, errorHandler)
+
+        viewModel.state.test {
+            assertEquals(ResourceState.Loading, awaitItem())
+            viewModel.refresh()
+
+            advanceUntilIdle()
+
+            val error = awaitItem() as ResourceState.Error
+            assertEquals("Network Error", error.message)
             cancelAndIgnoreRemainingEvents()
         }
     }
