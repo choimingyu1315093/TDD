@@ -2,6 +2,7 @@ package com.example.tdd.viewmodel.area
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tdd.BuildConfig
 import com.example.tdd.model.area.Area
 import com.example.tdd.model.area.AreaRepository
 import com.example.tdd.model.common.ErrorHandler
@@ -20,7 +21,13 @@ class AreaViewModel(
 
     fun refresh(){
         viewModelScope.launch {
-            //실제 작업.
+            _state.value = ResourceState.Loading
+            try {
+                val data = repo.getAreaCode("AND", "App", BuildConfig.SERVICE_KEY)
+                _state.value = ResourceState.Success(data)
+            } catch (t: Throwable) {
+                _state.value = ResourceState.Error(errorHandler.wrap(t).message ?: "Unknown Error")
+            }
         }
     }
 }
