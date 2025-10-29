@@ -82,5 +82,6 @@ class AreaMapperTest {
 
         val result = mapper.dtoToList(dto)
         assertEquals(listOf(Area(3, "대구")), result)
+        assertEquals(1, result.size)
     }
 }

@@ -23,7 +23,7 @@ class AreaViewModel(
         viewModelScope.launch {
             _state.value = ResourceState.Loading
             try {
-                val data = repo.getAreaCode("AND", "App", BuildConfig.SERVICE_KEY)
+                val data = repo.getAreaCode("AND", "APP", BuildConfig.SERVICE_KEY)
                 _state.value = ResourceState.Success(data)
             } catch (t: Throwable) {
                 _state.value = ResourceState.Error(errorHandler.wrap(t).message ?: "Unknown Error")
