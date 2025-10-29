@@ -24,7 +24,11 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "SERVICE_KEY", "\"DUMMY\"")
+            val debugKey = gradleLocalProperties(rootDir, providers)
+                .getProperty("SERVICE_KEY")
+                ?: System.getenv("SERVICE_KEY")
+                ?: "DUMMY"
+            buildConfigField("String", "SERVICE_KEY", "\"$debugKey\"")
         }
         release {
             val realKey = gradleLocalProperties(rootDir, providers)

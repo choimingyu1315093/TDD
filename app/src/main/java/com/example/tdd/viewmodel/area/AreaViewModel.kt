@@ -1,5 +1,6 @@
 package com.example.tdd.viewmodel.area
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tdd.BuildConfig
@@ -20,12 +21,15 @@ class AreaViewModel(
     val state: StateFlow<ResourceState<List<Area>>> = _state
 
     fun refresh(){
+        Log.d("TAG", "refresh: 호출 1 ${BuildConfig.SERVICE_KEY}")
         viewModelScope.launch {
             _state.value = ResourceState.Loading
             try {
                 val data = repo.getAreaCode("AND", "APP", BuildConfig.SERVICE_KEY)
+                Log.d("TAG", "refresh: 호출 2")
                 _state.value = ResourceState.Success(data)
             } catch (t: Throwable) {
+                Log.d("TAG", "refresh: 호출 3")
                 _state.value = ResourceState.Error(errorHandler.wrap(t).message ?: "Unknown Error")
             }
         }
