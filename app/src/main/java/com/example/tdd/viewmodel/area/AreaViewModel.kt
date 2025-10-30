@@ -8,11 +8,14 @@ import com.example.tdd.model.area.Area
 import com.example.tdd.model.area.AreaRepository
 import com.example.tdd.model.common.ErrorHandler
 import com.example.tdd.ui.common.ResourceState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AreaViewModel(
+@HiltViewModel
+class AreaViewModel @Inject constructor(
     private val repo: AreaRepository,
     private val errorHandler: ErrorHandler
 ): ViewModel() {

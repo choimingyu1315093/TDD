@@ -1,8 +1,9 @@
 package com.example.tdd.model.area
 
 import com.example.tdd.model.common.ErrorHandler
+import javax.inject.Inject
 
-class AreaRepositoryImpl(
+class AreaRepositoryImpl @Inject constructor(
     private val api: AreaApiService,
     private val mapper: AreaMapper,
     private val errorHandler: ErrorHandler
