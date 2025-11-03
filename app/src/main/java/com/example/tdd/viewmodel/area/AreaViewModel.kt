@@ -21,7 +21,6 @@ class AreaViewModel(
 
     fun refresh(){
         viewModelScope.launch {
-            _state.value = ResourceState.Loading
             try {
                 val data = repo.getAreaCode("AND", "APP", BuildConfig.SERVICE_KEY)
                 _state.value = ResourceState.Success(data)

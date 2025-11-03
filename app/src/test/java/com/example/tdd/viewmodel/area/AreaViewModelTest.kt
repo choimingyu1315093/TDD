@@ -48,8 +48,6 @@ class AreaViewModelTest {
 
             advanceUntilIdle() //모든 비동기 작업이 끝날 때까지 진행 시켜!!(리모컨 실행 버튼)
 
-            assertEquals(ResourceState.Loading, awaitItem()) //Loading
-
             val success = awaitItem() as ResourceState.Success //Success
             assertEquals(listOf(Area(1, "서울")), success.data)
             cancelAndIgnoreRemainingEvents()
@@ -68,8 +66,6 @@ class AreaViewModelTest {
             viewModel.refresh()
 
             advanceUntilIdle()
-
-            assertEquals(ResourceState.Loading, awaitItem()) //Loading
 
             val error = awaitItem() as ResourceState.Error
             assertEquals("Network Error", error.message)
