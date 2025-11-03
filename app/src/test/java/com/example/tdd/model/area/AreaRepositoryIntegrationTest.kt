@@ -23,7 +23,7 @@ class AreaRepositoryIntegrationTest {
 
     @Before
     fun setup(){
-        server = MockWebServer().apply { start() }
+        server = MockWebServer().apply { start() } //가짜 서버를 시작한다. 실제 네트워크 없이도 테스트 할 수 있다.
 
         val retrofit = Retrofit.Builder()
             .baseUrl(server.url("/"))
@@ -55,7 +55,7 @@ class AreaRepositoryIntegrationTest {
             }
         """.trimIndent()
 
-        server.enqueue(MockResponse().setResponseCode(200).setBody(json))
+        server.enqueue(MockResponse().setResponseCode(200).setBody(json)) //가짜 응답을 서버에 넣어준다.
 
         val repo = AreaRepositoryImpl(api, mapper, errorHandler)
         val result = repo.getAreaCode("AND", "APP", "SERVICEKEY")
@@ -77,6 +77,6 @@ class AreaRepositoryIntegrationTest {
 
     @After
     fun tearDown(){
-        server.shutdown()
+        server.shutdown() //가짜 서버 종료
     }
 }
