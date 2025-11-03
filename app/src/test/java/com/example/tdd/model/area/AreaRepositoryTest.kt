@@ -47,7 +47,7 @@ class AreaRepositoryTest {
     val repo = AreaRepositoryImpl(api, mapper, errorHandler)
 
     @Test
-    fun `성공 테스트`() = runTest {
+    fun `성공 테스트`() = runTest { //runTest는 코루틴을 테스트하기 위한 전용 함수다.
         val result = repo.getAreaCode("AND", "APP", "ServiceKey")
         assertEquals(listOf(Area(1, "서울"), Area(2, "부산")), result)
     }

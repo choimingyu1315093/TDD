@@ -35,11 +35,6 @@ class AreaViewModelTest {
         Dispatchers.setMain(dispatcher)
     }
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
     @Test
     fun `refresh 호출 시, Loading 다음 Success`() = runTest {
         val repo = FakeRepoImpl(Result.success(listOf(Area(1, "서울"))))
@@ -48,9 +43,12 @@ class AreaViewModelTest {
 
         viewModel.state.test {
             assertEquals(ResourceState.Loading, awaitItem()) //Loading
+
             viewModel.refresh()
 
             advanceUntilIdle() //모든 비동기 작업이 끝날 때까지 진행 시켜!!(리모컨 실행 버튼)
+
+            assertEquals(ResourceState.Loading, awaitItem()) //Loading
 
             val success = awaitItem() as ResourceState.Success //Success
             assertEquals(listOf(Area(1, "서울")), success.data)
@@ -66,13 +64,21 @@ class AreaViewModelTest {
 
         viewModel.state.test {
             assertEquals(ResourceState.Loading, awaitItem())
+
             viewModel.refresh()
 
             advanceUntilIdle()
+
+            assertEquals(ResourceState.Loading, awaitItem()) //Loading
 
             val error = awaitItem() as ResourceState.Error
             assertEquals("Network Error", error.message)
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 }
