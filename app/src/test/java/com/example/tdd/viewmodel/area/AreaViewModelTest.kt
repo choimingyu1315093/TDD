@@ -17,6 +17,7 @@ import org.junit.Test
 import java.io.IOException
 import kotlin.test.assertEquals
 
+//private val result: Result<List<Area>> 외부에서 결과를 미리 넣어줄 수 있게 만든 변수.
 class FakeRepoImpl(private val result: Result<List<Area>>): AreaRepository{
     override suspend fun getAreaCode(
         os: String,
